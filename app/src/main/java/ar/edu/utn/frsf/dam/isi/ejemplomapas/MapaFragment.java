@@ -3,6 +3,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -12,10 +13,21 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.List;
 
-public class MapaFragment extends SupportMapFragment implements OnMapReadyCallback {
+public class MapaFragment extends SupportMapFragment implements OnMapReadyCallback,GoogleMap.OnPoiClickListener {
+
+
+    @Override
+    public void onPoiClick(PointOfInterest poi) {
+        Toast.makeText(getActivity(), "Clicked: " +
+                        poi.name + "\nPlace ID:" + poi.placeId +
+                        "\nLatitude:" + poi.latLng.latitude +
+                        " Longitude:" + poi.latLng.longitude,
+                Toast.LENGTH_SHORT).show();
+    }
 
     public interface OnMapaListener {
         public void coordenadasSeleccionadas(LatLng c);
@@ -51,7 +63,7 @@ public class MapaFragment extends SupportMapFragment implements OnMapReadyCallba
         LatLng latLng = new LatLng(36.679582, -5.444791);
         float zoom = 16;
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
+        map.setOnPoiClickListener(this);
         for(Lugar l : lugaresMostrar){
             this.agregarMarcadorColor(l);
         }
